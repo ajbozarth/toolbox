@@ -1,0 +1,317 @@
+[
+    {
+        "id": "QKT100-providers-fix-01",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import Aer\nbackend = Aer.get_backend('statevector_simulator')\n```"
+    },
+    {
+        "id": "QKT100-providers-fix-02",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import BasicAer\nbackend = BasicAer.get_backend('qasm_simulator')\n```"
+    },
+    {
+        "id": "QKT100-algorithms-fix-01",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.algorithms import VQE, QAOA\nfrom qiskit.algorithms.optimizers import COBYLA\n```"
+    },
+    {
+        "id": "QKT100-opflow-fix-01",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.opflow import PauliSumOp, StateFn\noperator = PauliSumOp.from_list([('ZZ', 1.0), ('XX', 0.5)])\n```"
+    },
+    {
+        "id": "QKT100-execute-fix-01",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit, execute, Aer\nqc = QuantumCircuit(2)\nqc.h(0)\nqc.cx(0, 1)\nresult = execute(qc, Aer.get_backend('qasm_simulator'), shots=1024).result()\n```"
+    },
+    {
+        "id": "QKT100-extensions-fix-01",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.extensions import UnitaryGate, HamiltonianGate\nimport numpy as np\ngate = UnitaryGate(np.eye(2))\n```"
+    },
+    {
+        "id": "QKT100-qasm-fix-01",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.qasm import Qasm\nparser = Qasm(filename='my_circuit.qasm')\ncircuit = parser.parse()\n```"
+    },
+    {
+        "id": "QKT100-generate-01",
+        "rule": "QKT100",
+        "category": "qiskit1_imports",
+        "prompt_type": "generate",
+        "prompt": "Write Python code using Qiskit to create a 3-qubit GHZ state circuit and simulate it using a local statevector simulator. Print the resulting statevector. Use only Qiskit 1.0+ compatible APIs."
+    },
+    {
+        "id": "QKT101-qasm-fix-01",
+        "rule": "QKT101",
+        "category": "qiskit1_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit\nqc = QuantumCircuit(2)\nqc.h(0)\nqc.cx(0, 1)\nqasm_str = qc.qasm()\nprint(qasm_str)\n```"
+    },
+    {
+        "id": "QKT101-bind-fix-01",
+        "rule": "QKT101",
+        "category": "qiskit1_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit\nfrom qiskit.circuit import Parameter\ntheta = Parameter('theta')\nqc = QuantumCircuit(1)\nqc.ry(theta, 0)\nbound_qc = qc.bind_parameters({theta: 3.14})\n```"
+    },
+    {
+        "id": "QKT101-gate-aliases-fix-01",
+        "rule": "QKT101",
+        "category": "qiskit1_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit\nqc = QuantumCircuit(3)\nqc.cnot(0, 1)\nqc.toffoli(0, 1, 2)\nqc.fredkin(0, 1, 2)\n```"
+    },
+    {
+        "id": "QKT101-mct-fix-01",
+        "rule": "QKT101",
+        "category": "qiskit1_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit\nqc = QuantumCircuit(4)\nqc.mct([0, 1, 2], 3)\n```"
+    },
+    {
+        "id": "QKT101-extensions-fix-01",
+        "rule": "QKT101",
+        "category": "qiskit1_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit\nimport numpy as np\nqc = QuantumCircuit(1)\nqc.diagonal([1, -1], [0])\nqc.hamiltonian(np.array([[1, 0], [0, -1]]), 1.0, [0])\n```"
+    },
+    {
+        "id": "QKT101-generate-01",
+        "rule": "QKT101",
+        "category": "qiskit1_methods",
+        "prompt_type": "generate",
+        "prompt": "Write Qiskit 1.0+ compatible Python code that creates a parameterized quantum circuit with two parameters, binds specific values to them, and exports the circuit as a QASM 2.0 string. Use only modern Qiskit APIs."
+    },
+    {
+        "id": "QKT102-append-fix-01",
+        "rule": "QKT102",
+        "category": "qiskit1_kwargs",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.transpiler import PassManager\nfrom qiskit.transpiler.passes import Optimize1qGates\npm = PassManager()\npm.append(Optimize1qGates(), max_iteration=5)\n```"
+    },
+    {
+        "id": "QKT102-replace-fix-01",
+        "rule": "QKT102",
+        "category": "qiskit1_kwargs",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 1.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.transpiler import PassManager\nfrom qiskit.transpiler.passes import Optimize1qGates, CXCancellation\npm = PassManager()\npm.append(Optimize1qGates())\npm.replace(0, CXCancellation(), max_iteration=3)\n```"
+    },
+    {
+        "id": "QKT102-generate-01",
+        "rule": "QKT102",
+        "category": "qiskit1_kwargs",
+        "prompt_type": "generate",
+        "prompt": "Write Qiskit 1.0+ compatible Python code that creates a custom transpiler PassManager, appends Optimize1qGates and CXCancellation passes, and runs it on a simple 2-qubit circuit. Do not use the max_iteration keyword argument."
+    },
+    {
+        "id": "QKT200-pulse-fix-01",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.pulse.library.parametric_pulses import Gaussian, Drag\npulse = Gaussian(duration=256, amp=0.5, sigma=64)\n```"
+    },
+    {
+        "id": "QKT200-pulse-fix-02",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.pulse.builder import cx, u1, u2, u3\n```"
+    },
+    {
+        "id": "QKT200-pulse-fix-03",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.pulse.library import constant, gaussian, drag\nmy_pulse = gaussian(duration=256, amp=0.5, sigma=64)\n```"
+    },
+    {
+        "id": "QKT200-providers-fix-01",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.providers.fake_provider import FakeQasmBackend, FakePulseBackend\n```"
+    },
+    {
+        "id": "QKT200-providers-fix-02",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.providers.fake_provider.fake_backend_v2 import FakeBackendV2, FakeBackend5QV2\nbackend = FakeBackendV2()\n```"
+    },
+    {
+        "id": "QKT200-transpiler-fix-01",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.transpiler.passes import NoiseAdaptiveLayout, CrosstalkAdaptiveSchedule, Unroller\n```"
+    },
+    {
+        "id": "QKT200-generate-01",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "generate",
+        "prompt": "Write Python code using Qiskit 2.0+ to create a simple quantum circuit and transpile it for a generic fake backend. Use only modern Qiskit APIs — do not import from qiskit.providers.fake_provider.fake_backend_v2 or use FakeBackendV2."
+    },
+    {
+        "id": "QKT200-generate-02",
+        "rule": "QKT200",
+        "category": "qiskit2_imports",
+        "prompt_type": "generate",
+        "prompt": "Write Qiskit 2.0+ compatible Python code that creates a custom pulse using the symbolic pulse library. Do not use qiskit.pulse.library.parametric_pulses or lowercase function-based pulse constructors like qiskit.pulse.library.gaussian."
+    },
+    {
+        "id": "QKT201-c_if-fix-01",
+        "rule": "QKT201",
+        "category": "qiskit2_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit\nqc = QuantumCircuit(1, 1)\nqc.h(0)\nqc.measure(0, 0)\nqc.x(0).c_if(0, 1)\n```"
+    },
+    {
+        "id": "QKT201-calibration-fix-01",
+        "rule": "QKT201",
+        "category": "qiskit2_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import QuantumCircuit\nfrom qiskit.pulse import Schedule\nqc = QuantumCircuit(1)\ncal_schedule = Schedule()\nqc.add_calibration('x', [0], cal_schedule)\nprint(qc.has_calibration_for(qc.data[0]))\n```"
+    },
+    {
+        "id": "QKT201-channels-fix-01",
+        "rule": "QKT201",
+        "category": "qiskit2_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nbackend.drive_channel(0)\nbackend.measure_channel(0)\nbackend.acquire_channel(0)\nbackend.control_channel((0, 1))\nbackend.instruction_schedule_map()\n```"
+    },
+    {
+        "id": "QKT201-target-fix-01",
+        "rule": "QKT201",
+        "category": "qiskit2_methods",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\ntarget.has_calibration('cx', (0, 1))\ntarget.get_calibration('cx', (0, 1))\ntarget.update_from_instruction_schedule_map(inst_map)\n```"
+    },
+    {
+        "id": "QKT201-generate-01",
+        "rule": "QKT201",
+        "category": "qiskit2_methods",
+        "prompt_type": "generate",
+        "prompt": "Write Qiskit 2.0+ compatible Python code that implements classical conditional logic in a quantum circuit — apply an X gate only if a measurement result is 1. Use the modern if_test context manager, not the deprecated c_if method."
+    },
+    {
+        "id": "QKT201-generate-02",
+        "rule": "QKT201",
+        "category": "qiskit2_methods",
+        "prompt_type": "generate",
+        "prompt": "Write Qiskit 2.0+ compatible Python code that conditionally applies a sequence of gates based on a classical measurement outcome using the if_test context manager. Do not use the c_if method."
+    },
+    {
+        "id": "QKT202-transpile-fix-01",
+        "rule": "QKT202",
+        "category": "qiskit2_kwargs",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import transpile\nfrom qiskit import QuantumCircuit\nqc = QuantumCircuit(2)\nqc.h(0)\nqc.cx(0, 1)\ntranspiled = transpile(qc, backend_properties=props, instruction_durations=durations, timing_constraints=constraints)\n```"
+    },
+    {
+        "id": "QKT202-transpile-fix-02",
+        "rule": "QKT202",
+        "category": "qiskit2_kwargs",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit import transpile\ntranspiled = transpile(qc, inst_map=inst_map)\n```"
+    },
+    {
+        "id": "QKT202-preset-fix-01",
+        "rule": "QKT202",
+        "category": "qiskit2_kwargs",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager\npm = generate_preset_pass_manager(optimization_level=2, backend_properties=props, instruction_durations=durations)\n```"
+    },
+    {
+        "id": "QKT202-passmanagerconfig-fix-01",
+        "rule": "QKT202",
+        "category": "qiskit2_kwargs",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.transpiler import PassManagerConfig\nconfig = PassManagerConfig(backend_properties=props, inst_map=inst_map)\n```"
+    },
+    {
+        "id": "QKT202-passes-fix-01",
+        "rule": "QKT202",
+        "category": "qiskit2_kwargs",
+        "prompt_type": "fix",
+        "prompt": "Modernize this Qiskit code to be compatible with Qiskit 2.0+. Return only the updated Python code.\n\n```python\nfrom qiskit.transpiler.passes import DenseLayout, VF2Layout, VF2PostLayout\nlayout1 = DenseLayout(backend_prop=props)\nlayout2 = VF2Layout(properties=props)\nlayout3 = VF2PostLayout(properties=props)\n```"
+    },
+    {
+        "id": "QKT202-generate-01",
+        "rule": "QKT202",
+        "category": "qiskit2_kwargs",
+        "prompt_type": "generate",
+        "prompt": "Write Qiskit 2.0+ compatible Python code that creates a preset pass manager at optimization level 2 using a Target object. Do not use backend_properties, instruction_durations, timing_constraints, or inst_map keyword arguments."
+    },
+    {
+        "id": "general-bell-state-01",
+        "rule": null,
+        "category": "general",
+        "prompt_type": "generate",
+        "prompt": "create a bell state circuit"
+    },
+    {
+        "id": "general-list-fake-backends-01",
+        "rule": null,
+        "category": "general",
+        "prompt_type": "generate",
+        "prompt": "use qiskit to list fake backends"
+    },
+    {
+        "id": "general-random-circuit-01",
+        "rule": null,
+        "category": "general",
+        "prompt_type": "generate",
+        "prompt": "give me a random qiskit circuit"
+    },
+    {
+        "id": "general-entanglement-circuit-01",
+        "rule": null,
+        "category": "general",
+        "prompt_type": "generate",
+        "prompt": "from qiskit import QuantumCircuit\n\n# create an entanglement state circuit"
+    },
+    {
+        "id": "multi-toffoli-completion-01",
+        "rule": "QKT101",
+        "category": "multi_rule",
+        "prompt_type": "fix",
+        "prompt": "Complete this code:\n```python\nfrom qiskit import QuantumCircuit\n\nqc = QuantumCircuit(3)\nqc.toffoli(0, 1, 2)\n\n# draw the circuit\n```"
+    },
+    {
+        "id": "multi-deprecated-basicaer-01",
+        "rule": null,
+        "category": "multi_rule",
+        "prompt_type": "fix",
+        "prompt": "from qiskit import BasicAer, QuantumCircuit, execute\n\nbackend = BasicAer.get_backend('qasm_simulator')\n\nqc = QuantumCircuit(5, 5)\nqc.h(0)\nqc.cnot(0, range(1, 5))\nqc.measure_all()\n\n# run circuit on the simulator"
+    },
+    {
+        "id": "general-runtime-estimator-01",
+        "rule": null,
+        "category": "general",
+        "prompt_type": "generate",
+        "prompt": "from qiskit.circuit.random import random_circuit\nfrom qiskit.quantum_info import SparsePauliOp\nfrom qiskit_ibm_runtime import Estimator, Options, QiskitRuntimeService, Session\n\n# create a Qiskit random circuit named \"circuit\" with 2 qubits, depth 2, seed 1.\n# After that, generate an observable type SparsePauliOp(\"IY\"). Run it in the backend \"ibm_sherbrooke\" using QiskitRuntimeService inside a session\n# Instantiate the runtime Estimator primitive using the session and the options optimization level 3 and resilience level 2. Run the estimator\n# Conclude the code printing the observable, expectation value and the metadata of the job."
+    },
+    {
+        "id": "general-bell-runtime-01",
+        "rule": null,
+        "category": "general",
+        "prompt_type": "generate",
+        "prompt": "from qiskit import QuantumCircuit\nfrom qiskit_ibm_runtime import QiskitRuntimeService\n\n# define a Bell circuit and run it in ibm_salamanca using QiskitRuntimeService"
+    }
+]

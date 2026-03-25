@@ -1,0 +1,34 @@
+--- Pass Rate by Context Mode ---
+none: 37/45 (82.2%)
+grounding: 35/45 (77.8%)
+system_prompt: 116/135 (85.9%)
+both: 121/135 (89.6%)
+
+--- System Prompt Variant Comparison ---
+inline: 83/90 (92.2%)
+chat: 79/90 (87.8%)
+codegen: 75/90 (83.3%)
+
+--- Repair Efficiency ---
+none: Avg Attempts: 1.95, First Try Pass: 67.6%
+grounding: Avg Attempts: 1.91, First Try Pass: 62.9%
+system_prompt: Avg Attempts: 2.37, First Try Pass: 58.6%
+both: Avg Attempts: 1.97, First Try Pass: 62.8%
+
+--- Prompt Difficulty ---
+multi-deprecated-basicaer-01: 3/8 (37.5%)
+QKT200-generate-02: 4/8 (50.0%)
+QKT201-generate-02: 4/8 (50.0%)
+QKT201-generate-01: 4/8 (50.0%)
+QKT100-execute-fix-01: 4/8 (50.0%)
+QKT100-generate-01: 4/8 (50.0%)
+general-random-circuit-01: 5/8 (62.5%)
+general-bell-state-01: 5/8 (62.5%)
+
+--- Failure Patterns ---
+QKT100: 37
+QKT200: 7
+Invalid Python syntax: 6
+QKT101: 3
+QKT201: 3
+Other errors: 1

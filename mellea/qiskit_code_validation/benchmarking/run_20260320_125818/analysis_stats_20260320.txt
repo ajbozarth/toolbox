@@ -1,0 +1,31 @@
+--- Pass Rate by Context Mode ---
+none: 6/8 (75.0%)
+grounding: 6/8 (75.0%)
+system_prompt: 17/24 (70.8%)
+both: 18/24 (75.0%)
+
+--- System Prompt Variant Comparison ---
+inline: 11/16 (68.8%)
+chat: 12/16 (75.0%)
+codegen: 12/16 (75.0%)
+
+--- Repair Efficiency ---
+none: Avg Attempts: 2.12, First Try Pass: 62.5%
+grounding: Avg Attempts: 2.75, First Try Pass: 25.0%
+system_prompt: Avg Attempts: 2.54, First Try Pass: 50.0%
+both: Avg Attempts: 2.50, First Try Pass: 54.2%
+
+--- Prompt Difficulty ---
+deprecated_basicaer: 0/8 (0.0%)
+bell_state: 4/8 (50.0%)
+random_circuit: 5/8 (62.5%)
+list_fake_backends: 7/8 (87.5%)
+runtime_estimator: 7/8 (87.5%)
+toffoli_completion: 8/8 (100.0%)
+entanglement_circuit: 8/8 (100.0%)
+bell_runtime: 8/8 (100.0%)
+
+--- Failure Patterns ---
+QKT100: 20
+QKT101: 7
+Invalid Python syntax: 1
