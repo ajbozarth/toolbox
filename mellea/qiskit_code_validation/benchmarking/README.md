@@ -8,7 +8,9 @@ This directory contains all benchmarking scripts, data, and analysis from the re
 
 | File | Description |
 |---|---|
-| `benchmark.py` | Main benchmark runner. Runs the IVR pipeline across combinations of models, system prompts, and strategies. See usage below. |
+| `benchmark.py` | v1 benchmark runner. Runs the IVR pipeline across combinations of models, system prompts, and strategies. See usage below. |
+| `benchmark_v2.py` | v2 benchmark runner. Pure IVR, Qiskit model only, strategy comparison. Runs QKT and QHE phases sequentially. See usage below. |
+| `run_benchmark_with_ollama.sh` | Shell script for running `benchmark_v2.py` on LSF (bluevela). Handles ollama install, model pull, warmup, and cleanup. |
 | `check_analysis.py` | Post-run correctness checker. Runs the QHE `check()` unit tests against stored `generated_code` to measure actual correctness beyond QKT pass rate. |
 | `qkt_benchmark_v1.json` | 45-prompt benchmark corpus covering QKT100–QKT202 rules + 6 general Qiskit generation tasks. Used for all Phase 0/1 QKT runs. |
 | `test-00000-of-00001.parquet` | [Qiskit Human Eval](https://huggingface.co/datasets/Qiskit/qiskit_humaneval) dataset — 151 Qiskit code generation problems with canonical solutions and `check()` unit tests. Used for Phase 2 runs. |
@@ -82,6 +84,18 @@ run_phase2_20260323_220911/
 
 **Key finding:** QKT pass rate is a weak signal for general code generation. The Qiskit model passes QKT at 100% but only 40% of outputs are actually correct by `check()`. micro-h passes QKT at 94% but only 4.2% are correct — the repair loop is recovering from deprecated-API mistakes, not knowledge gaps.
 
+### Phase 3 — IVR-only re-run (v2, Qiskit model, LSF)
+
+Re-run after removing pre-IVR input validation from the example. Strategy is the only variable; no system prompt or grounding context.
+
+| Run | Model | Config | Prompts | Results |
+|---|---|---|---|---|
+| `run_ivr_20260331_183642/` | Qiskit model | repair_template, multi_turn | 45 QKT + 151 QHE | 392 cases, 392/392 QKT passed; 84/302 QHE check() passed (27.8%) |
+
+See `run_ivr_20260331_183642/analysis_v2.md` for full analysis.
+
+**Key finding:** IVR resolves 100% of cases within 10 attempts for both strategies. `multi_turn` is the better strategy for QKT migration tasks (97.8% vs 88.9% first-attempt); strategies are equivalent on QHE. The ~5% drop in QHE check() pass rate vs Phase 2 (32.5% → 27.8%) is attributed to stochastic variance and hardware differences (LSF vs laptop).
+
 ---
 
 ## Running the benchmark
@@ -93,6 +107,32 @@ Requires `uv`. Run from the `qiskit_code_validation/` directory (one level up fr
 ```bash
 uv run benchmark.py --example-dir /path/to/mellea/docs/examples/instruct_validate_repair/qiskit_code_validation
 ```
+
+### v2 (`benchmark_v2.py`)
+
+```bash
+# Run both phases (QKT + QHE) sequentially — default
+uv run benchmark_v2.py --example-dir /path/to/mellea/docs/examples/instruct_validate_repair/qiskit_code_validation
+
+# Run only one phase
+uv run benchmark_v2.py --phase1 --example-dir ...
+uv run benchmark_v2.py --phase2 --example-dir ...
+
+# Resume an interrupted run
+uv run benchmark_v2.py --resume --phase1 --example-dir ...
+uv run benchmark_v2.py --resume --phase2 --example-dir ...
+```
+
+On LSF (bluevela), use `run_benchmark_with_ollama.sh` instead — it handles ollama setup automatically:
+
+```bash
+bsub -N -u your@email.com \
+  -n 1 -G grp_preemptable -q preemptable \
+  -gpu "num=1/task:mode=shared:j_exclusive=yes" \
+  "cd /proj/dmfexp/eiger/users/ajbozarth/toolbox/mellea/qiskit_code_validation/benchmarking && bash run_benchmark_with_ollama.sh"
+```
+
+### v1 (`benchmark.py`)
 
 ---
 
