@@ -1,13 +1,13 @@
 #!/bin/bash
 # run_benchmark_with_ollama.sh
-# Installs ollama if needed, pulls the Qiskit model, runs benchmark_v2.py,
+# Installs ollama if needed, pulls the Qiskit model, runs benchmark_v3.py,
 # and shuts everything down cleanly.
 #
 # Usage (local):
 #   ./run_benchmark_with_ollama.sh
-#   ./run_benchmark_with_ollama.sh --phase1
-#   ./run_benchmark_with_ollama.sh --phase2
-#   ./run_benchmark_with_ollama.sh --resume --phase2
+#   ./run_benchmark_with_ollama.sh --repair-template
+#   ./run_benchmark_with_ollama.sh --multi-turn
+#   ./run_benchmark_with_ollama.sh --resume
 #
 # LSF example (bluevela):
 #   bsub -n 1 -G grp_preemptable -q preemptable \
@@ -147,7 +147,7 @@ log "Starting benchmark..."
 log "Example dir: $MELLEA_EXAMPLE_DIR"
 log "Benchmark args: ${*:-<none> (running both phases)}"
 
-uv run --quiet "$SCRIPT_DIR/benchmark_v2.py" \
+uv run --quiet "$SCRIPT_DIR/benchmark_v3.py" \
     --example-dir "$MELLEA_EXAMPLE_DIR" \
     "$@" \
     2>&1 | tee "$LOGDIR/benchmark.log"
