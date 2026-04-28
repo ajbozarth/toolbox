@@ -1,0 +1,18 @@
+Loaded 151 QHE prompts from test-00000-of-00001.parquet
+
+============================================================
+QHE v3: 151 prompts × 2 strategies = 302 runs
+Validators: QKT (flake8) + QHE check() [PR #88 assertion messages]
+Model: hf.co/Qiskit/mistral-small-3.2-24b-qiskit-GGUF:latest
+Output: /proj/dmfexp/eiger/users/ajbozarth/toolbox/mellea/qiskit_code_validation/benchmarking/run_v3_20260428_122847/benchmark_qhe_v3_20260428_122847.json
+============================================================
+
+[38;20m=== 12:28:48-INFO ======
+Starting Mellea session: backend=ollama, model=hf.co/Qiskit/mistral-small-3.2-24b-qiskit-GGUF:latest, context=ChatContext, model_options={'temperature': 0.8, '@@@max_new_tokens@@@': 2048}[0m
+[1/302 | 0/0 passed | 00:00:00] qiskitHumanEval/0 | repair_template
+  0%|          | 0/10 [00:00<?, ?it/s][38;20m=== 13:46:00-INFO ======
+SUCCESS[0m
+  0%|          | 0/10 [1:17:12<?, ?it/s]
+  → PASS in 1 attempt(s), 4632.6s
+[2/302 | 1/1 passed | 01:17:12] qiskitHumanEval/0 | multi_turn
+  0%|          | 0/10 [00:00<?, ?it/s]

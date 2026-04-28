@@ -1,0 +1,4 @@
+# Circuit files generated as side effects of exec()-ing QHE solutions
+*.qpy
+*.qasm
+*.qasm2

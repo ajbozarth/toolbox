@@ -1,0 +1,50 @@
+Loaded 151 QHE prompts from test-00000-of-00001.parquet
+
+Resuming from benchmark_qhe_v3_20260427_194907.json (300 results already recorded)
+
+============================================================
+QHE v3: 151 prompts × 2 strategies = 302 runs
+Validators: QKT (flake8) + QHE check() [PR #88 assertion messages]
+Model: hf.co/Qiskit/mistral-small-3.2-24b-qiskit-GGUF:latest
+Output: run_v3_20260427_194907/benchmark_qhe_v3_20260427_194907.json
+============================================================
+
+[38;20m=== 18:47:45-INFO ======
+Starting Mellea session: backend=ollama, model=hf.co/Qiskit/mistral-small-3.2-24b-qiskit-GGUF:latest, context=ChatContext, model_options={'temperature': 0.8, '@@@max_new_tokens@@@': 2048}[0m
+[301/302 | 150/300 passed | 00:00:00] qiskitHumanEval/150 | repair_template
+  0%|          | 0/10 [00:00<?, ?it/s][38;20m=== 18:47:51-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 10%|█         | 1/10 [00:06<00:57,  6.41s/it][38;20m=== 18:47:58-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 20%|██        | 2/10 [00:12<00:51,  6.42s/it][38;20m=== 18:48:05-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 30%|███       | 3/10 [00:19<00:45,  6.57s/it][38;20m=== 18:48:10-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 40%|████      | 4/10 [00:25<00:37,  6.26s/it][38;20m=== 18:48:17-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 50%|█████     | 5/10 [00:31<00:31,  6.38s/it][38;20m=== 18:48:21-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 60%|██████    | 6/10 [00:35<00:22,  5.54s/it][38;20m=== 18:48:26-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 70%|███████   | 7/10 [00:41<00:16,  5.49s/it][38;20m=== 18:48:34-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 80%|████████  | 8/10 [00:48<00:12,  6.13s/it][38;20m=== 18:48:38-INFO ======
+SUCCESS[0m
+ 80%|████████  | 8/10 [00:53<00:13,  6.68s/it]
+  → PASS in 9 attempt(s), 53.4s
+[302/302 | 151/301 passed | 00:00:53] qiskitHumanEval/150 | multi_turn
+  0%|          | 0/10 [00:00<?, ?it/s][38;20m=== 18:48:43-INFO ======
+SUCCESS[0m
+  0%|          | 0/10 [00:04<?, ?it/s]
+  → PASS in 1 attempt(s), 4.9s
+
+QHE v3 complete: 152/302 passed (QKT + check())
+Results: run_v3_20260427_194907/benchmark_qhe_v3_20260427_194907.json
