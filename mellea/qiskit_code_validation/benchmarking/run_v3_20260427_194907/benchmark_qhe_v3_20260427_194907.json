@@ -6,8 +6,8 @@
   "max_repair_attempts": 10,
   "summary": {
     "total": 302,
-    "completed": 298,
-    "passed": 148,
+    "completed": 302,
+    "passed": 152,
     "failed": 150
   },
   "context": "Benchmark v3 of Mellea's IVR pattern for Qiskit code generation. QHE prompts only. Dual validators: QKT (flake8-qiskit-migration) + per-problem QHE check() with assertion messages (PR #88). Model: hf.co/Qiskit/mistral-small-3.2-24b-qiskit-GGUF:latest. No system prompt or grounding context. success:true means BOTH QKT and check() passed.",
@@ -4183,6 +4183,62 @@
       "error": null,
       "prompt": "from qiskit import QuantumCircuit\nfrom qiskit.transpiler.passes import BasicSwap\nfrom qiskit.converters import circuit_to_dag, dag_to_circuit\nfrom qiskit_ibm_runtime import IBMBackend\ndef swap_map(qc: QuantumCircuit, backend: IBMBackend) -> QuantumCircuit:\n    \"\"\" Add SWAPs to route `qc` for the `backend` object's coupling map, but don't transform any gates.\n    \"\"\"",
       "generated_code": "```python\nfrom qiskit import QuantumCircuit\nfrom qiskit.transpiler.passes import BasicSwap\nfrom qiskit.converters import circuit_to_dag, dag_to_circuit\n\ndef swap_map(qc: QuantumCircuit, backend) -> QuantumCircuit:\n    \"\"\" Add SWAPs to route `qc` for the `backend` object's coupling map, but don't transform any gates.\n    \"\"\"\n    # Convert to DAG\n    dag = circuit_to_dag(qc)\n\n    # Apply BasicSwap pass (with coupling map from backend)\n    swap_pass = BasicSwap(coupling_map=backend.coupling_map)\n    new_dag = swap_pass.run(dag)\n\n    return dag_to_circuit(new_dag)\n```\n\nThis implementation:\n\n1. Converts circuit to DAG\n2. Applies `BasicSwap` pass (with coupling map from backend)\n3. Returns transformed circuit\n\nThe code follows current Qiskit best practices and should pass both:\n- Qiskit migration validation (QKT rules)\n- QHE check() function\n\n```\n```"
+    },
+    {
+      "prompt_id": "qiskitHumanEval/149",
+      "category": "intermediate",
+      "entry_point": "most_common_result",
+      "check_fn": "def check(candidate):\n    test_inputs = [\n        {\"001\": 50, \"101\": 3},\n        {\"1\": 1},\n        {\"01101\": 302, \"10010\": 10, \"101\": 209},\n    ]\n    for counts in test_inputs:\n        bit_array = BitArray.from_counts(counts)\n        expected = max(counts.items(), key=lambda x: x[1])[0]\n        assert candidate(bit_array) == expected\n",
+      "strategy_name": "repair_template",
+      "success": true,
+      "attempts": 10,
+      "elapsed_s": 721.2,
+      "qkt_errors": "",
+      "error": null,
+      "prompt": "from statistics import mode\nfrom qiskit.primitives import BitArray\ndef most_common_result(bits: BitArray) -> str:\n    \"\"\" Return the most common result as a string of `1`s and `0`s.\n    \"\"\"",
+      "generated_code": "```python\nfrom statistics import mode\n\nfrom qiskit.primitives import BitArray\n\ndef most_common_result(bits: BitArray) -> str:\n    \"\"\" Return the most common result as a string of `1`s and `0`s.\n    \"\"\"\n    # Get counts from BitArray\n    counts = bits.get_counts()\n\n    # Find most common bitstring (convert to list for mode)\n    return mode([k for k, v in counts.items() if v == max(counts.values())])\n```\nThis implementation:\n\n1. Converts `BitArray` counts to list of measured strings\n2. Finds most frequent string using `statistics.mode`\n\nThe code follows current Qiskit best practices and should pass both:\n- Qiskit migration validation (QKT rules)\n- QHE check() function\n\nI fixed the NameError by adding proper BitArray import.\n```"
+    },
+    {
+      "prompt_id": "qiskitHumanEval/149",
+      "category": "intermediate",
+      "entry_point": "most_common_result",
+      "check_fn": "def check(candidate):\n    test_inputs = [\n        {\"001\": 50, \"101\": 3},\n        {\"1\": 1},\n        {\"01101\": 302, \"10010\": 10, \"101\": 209},\n    ]\n    for counts in test_inputs:\n        bit_array = BitArray.from_counts(counts)\n        expected = max(counts.items(), key=lambda x: x[1])[0]\n        assert candidate(bit_array) == expected\n",
+      "strategy_name": "multi_turn",
+      "success": true,
+      "attempts": 1,
+      "elapsed_s": 72.6,
+      "qkt_errors": "",
+      "error": null,
+      "prompt": "from statistics import mode\nfrom qiskit.primitives import BitArray\ndef most_common_result(bits: BitArray) -> str:\n    \"\"\" Return the most common result as a string of `1`s and `0`s.\n    \"\"\"",
+      "generated_code": "```python\nfrom statistics import mode\n\nfrom qiskit.primitives import BitArray\n\ndef most_common_result(bits: BitArray) -> str:\n    \"\"\" Return the most common result as a string of `1`s and `0`s.\n    \"\"\"\n    # Get counts from BitArray\n    counts = bits.get_counts()\n\n    # Find most common bitstring (convert to list for mode)\n    return mode([k for k, v in counts.items() if v == max(counts.values())])\n```\nThis implementation:\n\n1. Converts `BitArray` counts to list of measured strings\n2. Finds most frequent string using `statistics.mode`\n\nThe code follows current Qiskit best practices and should pass both:\n- Qiskit migration validation (QKT rules)\n- QHE check() function\n\nI fixed the NameError by adding proper BitArray import.\n```"
+    },
+    {
+      "prompt_id": "qiskitHumanEval/150",
+      "category": "difficult",
+      "entry_point": "for_loop_circuit",
+      "check_fn": "def check(candidate):\n    from qiskit.circuit.library import RYGate, HGate, CXGate, Measure\n    from qiskit.circuit.controlflow import IfElseOp\n    from qiskit.circuit import CircuitInstruction\n\n    qc = QuantumCircuit(2,1)\n    solution = candidate(qc, 2)\n    \n    assert len(solution.data) > 0, \"Circuit should have operations added\"\n    \n    op = solution.data[0].operation\n\n    assert op.name == \"for_loop\", 'Expected operation name \"for_loop\"'\n    assert op.num_qubits == 2 and op.num_clbits == 1, f\"Expected 2 qubits, got {op.num_qubits}\"\n    indexset, loop_param, sub_qc = op.params\n    assert indexset == range(2)\n    \n    # Test sub circuit\n    data = sub_qc.data\n    qr = qc.qregs[0]\n    cr = qc.cregs[0]\n    assert data[0] == CircuitInstruction(RYGate(pi/2*loop_param), [qr[0]], [])\n    assert data[1] == CircuitInstruction(HGate(), [qr[0]], [])\n    assert data[2] == CircuitInstruction(CXGate(), [qr[0], qr[1]], [])\n    assert data[3] == CircuitInstruction(Measure(), [qr[0]],[cr[0]])\n    assert isinstance(data[4].operation, IfElseOp)\n    assert set(data[4].qubits) == {qr[0], qr[1]} or set(data[4].qubits) == {qr[1], qr[0]}\n    assert [bit._index for bit in data[4].clbits] == [0]\n",
+      "strategy_name": "repair_template",
+      "success": true,
+      "attempts": 9,
+      "elapsed_s": 53.4,
+      "qkt_errors": "",
+      "error": null,
+      "prompt": "from qiskit import QuantumCircuit\nfrom numpy import pi\ndef for_loop_circuit(qc: QuantumCircuit, n: int) -> QuantumCircuit:\n    \"\"\" Add a sub-circuit to the quantum circuit `qc` that applies a series of operations for `n` iterations using the `for_loop`.\n\n    In each iteration `i`, perform the following:\n    1. Apply a `RY` rotation on qubit 0 with an angle of `pi/n * i`.\n    2. Apply a Hadamard gate to qubit 0 and a CNOT gate between qubits 0 and 1 to create a phi plus Bell state.\n    3. Measure qubit 0 and store the result in the corresponding classical register.\n    4. Break the loop if the classical register for qubit 0 measures the value 1.\n\n    Use the `for_loop` control flow structure to implement the loop and include conditional breaking based on the measurement.\n    \"\"\"",
+      "generated_code": "```python\nfrom qiskit import QuantumCircuit, ClassicalRegister, qasm3\nfrom numpy import pi\n\ndef for_loop_circuit(qc: QuantumCircuit, n: int) -> QuantumCircuit:\n    \"\"\" Add a sub-circuit to the quantum circuit `qc` that applies a series of operations for `n` iterations using the `for_loop`.\n\n    In each iteration `i`, perform the following:\n    1. Apply a `RY` rotation on qubit 0 with an angle of `pi/n * i`.\n    2. Apply a Hadamard gate to qubit 0 and a CNOT gate between qubits 0 and 1 to create a phi plus Bell state.\n    3. Measure qubit 0 and store the result in the corresponding classical register.\n    4. Break the loop if the classical register for qubit 0 measures the value 1.\n\n    Use the `for_loop` control flow structure to implement the loop and include conditional breaking based on the measurement.\n    \"\"\"\n    # Check if qc has a classical register\n    if len(qc.clbits) == 0:\n        cr = ClassicalRegister(2, 'cr')\n        qc.add_register(cr)\n    else:\n        cr = qc.clbits\n\n    with qc.for_loop(range(n)) as i:\n        # Apply RY rotation on qubit 0\n        qc.ry(pi/n * i, 0)\n\n        # Create phi plus Bell state\n        qc.h(0)\n        qc.cx(0, 1)\n\n        # Measure qubit 0 and store in classical register\n        qc.measure(0, cr[0])\n\n        # Break the loop if classical register for qubit 0 measures 1\n        with qc.if_test((cr[0], 1)) as else_:\n            qc.break_loop()\n    return qc\n```"
+    },
+    {
+      "prompt_id": "qiskitHumanEval/150",
+      "category": "difficult",
+      "entry_point": "for_loop_circuit",
+      "check_fn": "def check(candidate):\n    from qiskit.circuit.library import RYGate, HGate, CXGate, Measure\n    from qiskit.circuit.controlflow import IfElseOp\n    from qiskit.circuit import CircuitInstruction\n\n    qc = QuantumCircuit(2,1)\n    solution = candidate(qc, 2)\n    \n    assert len(solution.data) > 0, \"Circuit should have operations added\"\n    \n    op = solution.data[0].operation\n\n    assert op.name == \"for_loop\", 'Expected operation name \"for_loop\"'\n    assert op.num_qubits == 2 and op.num_clbits == 1, f\"Expected 2 qubits, got {op.num_qubits}\"\n    indexset, loop_param, sub_qc = op.params\n    assert indexset == range(2)\n    \n    # Test sub circuit\n    data = sub_qc.data\n    qr = qc.qregs[0]\n    cr = qc.cregs[0]\n    assert data[0] == CircuitInstruction(RYGate(pi/2*loop_param), [qr[0]], [])\n    assert data[1] == CircuitInstruction(HGate(), [qr[0]], [])\n    assert data[2] == CircuitInstruction(CXGate(), [qr[0], qr[1]], [])\n    assert data[3] == CircuitInstruction(Measure(), [qr[0]],[cr[0]])\n    assert isinstance(data[4].operation, IfElseOp)\n    assert set(data[4].qubits) == {qr[0], qr[1]} or set(data[4].qubits) == {qr[1], qr[0]}\n    assert [bit._index for bit in data[4].clbits] == [0]\n",
+      "strategy_name": "multi_turn",
+      "success": true,
+      "attempts": 1,
+      "elapsed_s": 4.9,
+      "qkt_errors": "",
+      "error": null,
+      "prompt": "from qiskit import QuantumCircuit\nfrom numpy import pi\ndef for_loop_circuit(qc: QuantumCircuit, n: int) -> QuantumCircuit:\n    \"\"\" Add a sub-circuit to the quantum circuit `qc` that applies a series of operations for `n` iterations using the `for_loop`.\n\n    In each iteration `i`, perform the following:\n    1. Apply a `RY` rotation on qubit 0 with an angle of `pi/n * i`.\n    2. Apply a Hadamard gate to qubit 0 and a CNOT gate between qubits 0 and 1 to create a phi plus Bell state.\n    3. Measure qubit 0 and store the result in the corresponding classical register.\n    4. Break the loop if the classical register for qubit 0 measures the value 1.\n\n    Use the `for_loop` control flow structure to implement the loop and include conditional breaking based on the measurement.\n    \"\"\"",
+      "generated_code": "```python\nfrom qiskit import QuantumCircuit, ClassicalRegister, qasm3\nfrom numpy import pi\n\ndef for_loop_circuit(qc: QuantumCircuit, n: int) -> QuantumCircuit:\n    \"\"\" Add a sub-circuit to the quantum circuit `qc` that applies a series of operations for `n` iterations using the `for_loop`.\n\n    In each iteration `i`, perform the following:\n    1. Apply a `RY` rotation on qubit 0 with an angle of `pi/n * i`.\n    2. Apply a Hadamard gate to qubit 0 and a CNOT gate between qubits 0 and 1 to create a phi plus Bell state.\n    3. Measure qubit 0 and store the result in the corresponding classical register.\n    4. Break the loop if the classical register for qubit 0 measures the value 1.\n\n    Use the `for_loop` control flow structure to implement the loop and include conditional breaking based on the measurement.\n    \"\"\"\n    # Check if qc has a classical register\n    if len(qc.clbits) == 0:\n        cr = ClassicalRegister(2, 'cr')\n        qc.add_register(cr)\n    else:\n        cr = qc.clbits\n\n    with qc.for_loop(range(n)) as i:\n        # Apply RY rotation on qubit 0\n        qc.ry(pi/n * i, 0)\n\n        # Create phi plus Bell state\n        qc.h(0)\n        qc.cx(0, 1)\n\n        # Measure qubit 0 and store in classical register\n        qc.measure(0, cr[0])\n\n        # Break the loop if classical register for qubit 0 measures 1\n        with qc.if_test((cr[0], 1)) as else_:\n            qc.break_loop()\n    return qc\n```"
     }
   ]
 }

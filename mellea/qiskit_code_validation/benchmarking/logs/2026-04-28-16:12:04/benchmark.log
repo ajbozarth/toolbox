@@ -2592,4 +2592,44 @@ FAILED. Valid: 1/2. Failed:
  70%|███████   | 7/10 [08:23<03:35, 71.86s/it][38;20m=== 18:34:45-INFO ======
 FAILED. Valid: 1/2. Failed: 
 	 - Code must pass QHE check() function[0m
- 80%|████████  | 8/10 [09:36<02:24, 72.02s/it]
+ 80%|████████  | 8/10 [09:36<02:24, 72.02s/it][38;20m=== 18:35:58-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 90%|█████████ | 9/10 [10:48<01:12, 72.07s/it][38;20m=== 18:37:10-INFO ======
+SUCCESS[0m
+ 90%|█████████ | 9/10 [12:01<01:20, 80.13s/it]
+  → PASS in 10 attempt(s), 721.2s
+[300/302 | 149/299 passed | 02:24:48] qiskitHumanEval/149 | multi_turn
+  0%|          | 0/10 [00:00<?, ?it/s][38;20m=== 18:38:23-INFO ======
+SUCCESS[0m
+  0%|          | 0/10 [01:12<?, ?it/s]
+  → PASS in 1 attempt(s), 72.6s
+[301/302 | 150/300 passed | 02:26:01] qiskitHumanEval/150 | repair_template
+  0%|          | 0/10 [00:00<?, ?it/s][38;20m=== 18:39:41-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 10%|█         | 1/10 [01:18<11:42, 78.02s/it][38;20m=== 18:41:00-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 20%|██        | 2/10 [02:36<10:27, 78.39s/it][38;20m=== 18:42:18-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 30%|███       | 3/10 [03:54<09:07, 78.23s/it][38;20m=== 18:43:26-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 40%|████      | 4/10 [05:03<07:26, 74.47s/it][38;20m=== 18:44:46-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 50%|█████     | 5/10 [06:22<06:20, 76.19s/it][38;20m=== 18:46:03-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 60%|██████    | 6/10 [07:40<05:06, 76.67s/it][38;20m=== 18:47:19-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 70%|███████   | 7/10 [08:56<03:49, 76.48s/it][38;20m=== 18:48:40-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 80%|████████  | 8/10 [10:17<02:35, 77.92s/it][38;20m=== 18:49:58-INFO ======
+FAILED. Valid: 1/2. Failed: 
+	 - Code must pass QHE check() function[0m
+ 90%|█████████ | 9/10 [11:35<01:17, 77.88s/it]
