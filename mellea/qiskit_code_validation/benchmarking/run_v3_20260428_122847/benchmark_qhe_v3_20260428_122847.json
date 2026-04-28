@@ -1,0 +1,30 @@
+{
+  "version": 3,
+  "phase": "qhe",
+  "model": "hf.co/Qiskit/mistral-small-3.2-24b-qiskit-GGUF:latest",
+  "timestamp": "20260428_122847",
+  "max_repair_attempts": 10,
+  "summary": {
+    "total": 302,
+    "completed": 1,
+    "passed": 1,
+    "failed": 0
+  },
+  "context": "Benchmark v3 of Mellea's IVR pattern for Qiskit code generation. QHE prompts only. Dual validators: QKT (flake8-qiskit-migration) + per-problem QHE check() with assertion messages (PR #88). Model: hf.co/Qiskit/mistral-small-3.2-24b-qiskit-GGUF:latest. No system prompt or grounding context. success:true means BOTH QKT and check() passed.",
+  "results": [
+    {
+      "prompt_id": "qiskitHumanEval/0",
+      "category": "basic",
+      "entry_point": "create_quantum_circuit",
+      "check_fn": "def check(candidate):\n    result = candidate(3)\n    assert isinstance(result, QuantumCircuit), f\"Expected QuantumCircuit instance, got {type(result).__name__}\"\n    assert result.num_qubits == 3, f\"Expected 3 qubits, got {result.num_qubits}\"\n",
+      "strategy_name": "repair_template",
+      "success": true,
+      "attempts": 1,
+      "elapsed_s": 4632.6,
+      "qkt_errors": "",
+      "error": null,
+      "prompt": "from qiskit import QuantumCircuit\ndef create_quantum_circuit(n_qubits):\n    \"\"\" Generate a Quantum Circuit for the given int 'n_qubits' and return it.\n    \"\"\"",
+      "generated_code": "```python\nfrom qiskit import QuantumCircuit\n\ndef create_quantum_circuit(n_qubits):\n    \"\"\" Generate a Quantum Circuit for the given int 'n_qubits' and return it.\n    \"\"\"\n    if n_qubits <= 0:\n        raise ValueError(\"Number of qubits must be positive\")\n\n    qc = QuantumCircuit(n_qubits)\n    \n    # Add some gates to the circuit (you can customize this part as needed)\n    for i in range(n_qubits):\n        qc.h(i)  # Apply Hadamard gate to all qubits\n\n    return qc\n```\nThis code defines a function `create_quantum_circuit` that generates a QuantumCircuit with `n_qubits` qubits. It includes a Hadamard gate applied to each qubit as an example operation. The code adheres to Qiskit migration validation (QKT rules) and should pass the QHE check() function.\n\nMake sure to call this function with a positive integer argument, for example:\n```python\nqc = create_quantum_circuit(3)\nprint(qc)\n```\nThis will create a quantum circuit with 3 qubits."
+    }
+  ]
+}
