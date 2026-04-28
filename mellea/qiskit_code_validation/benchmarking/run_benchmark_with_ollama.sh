@@ -8,6 +8,7 @@
 #   ./run_benchmark_with_ollama.sh --repair-template
 #   ./run_benchmark_with_ollama.sh --multi-turn
 #   ./run_benchmark_with_ollama.sh --resume
+#   ./run_benchmark_with_ollama.sh --resume-from run_v3_20260427_194907/benchmark_qhe_v3_20260427_194907.json
 #
 # LSF example (bluevela):
 #   bsub -n 1 -G grp_preemptable -q preemptable \

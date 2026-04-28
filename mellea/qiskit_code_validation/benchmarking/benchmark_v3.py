@@ -291,9 +291,10 @@ if __name__ == "__main__":
     else:
         strategies = ["repair_template", "multi_turn"]
 
-    resume = "--resume" in sys.argv
     resume_path = None
-    if resume:
+    if "--resume-from" in sys.argv:
+        resume_path = Path(sys.argv[sys.argv.index("--resume-from") + 1])
+    elif "--resume" in sys.argv:
         resume_path = _find_latest("run_v3_*/benchmark_qhe_v3_*.json")
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
