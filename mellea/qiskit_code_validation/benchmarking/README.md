@@ -10,7 +10,9 @@ This directory contains all benchmarking scripts, data, and analysis from the re
 |---|---|
 | `benchmark.py` | v1 benchmark runner. Runs the IVR pipeline across combinations of models, system prompts, and strategies. See usage below. |
 | `benchmark_v2.py` | v2 benchmark runner. Pure IVR, Qiskit model only, strategy comparison. Runs QKT and QHE phases sequentially. See usage below. |
-| `run_benchmark_with_ollama.sh` | Shell script for running `benchmark_v2.py` on LSF (bluevela). Handles ollama install, model pull, warmup, and cleanup. |
+| `benchmark_v3.py` | v3 benchmark runner. QHE with `check()` wired into the IVR loop as a second validator alongside QKT. See usage below. |
+| `fetch_dataset.py` | Downloads the [Qiskit Human Eval](https://huggingface.co/datasets/Qiskit/qiskit_humaneval) parquet from HuggingFace, or directly from a GitHub PR branch. Used to pull [qiskit-human-eval PR #88](https://github.com/qiskit-community/qiskit-human-eval/pull/88) (assertion messages), which is the dataset variant v3 was run against. |
+| `run_benchmark_with_ollama.sh` | Shell script for running `benchmark_v3.py` on LSF (bluevela). Handles ollama install, model pull, warmup, and cleanup. |
 | `check_analysis.py` | Post-run correctness checker. Runs the QHE `check()` unit tests against stored `generated_code` to measure actual correctness beyond QKT pass rate. |
 | `qkt_benchmark_v1.json` | 45-prompt benchmark corpus covering QKT100–QKT202 rules + 6 general Qiskit generation tasks. Used for all Phase 0/1 QKT runs. |
 | `test-00000-of-00001.parquet` | [Qiskit Human Eval](https://huggingface.co/datasets/Qiskit/qiskit_humaneval) dataset — 151 Qiskit code generation problems with canonical solutions and `check()` unit tests. Used for Phase 2 runs. |
@@ -96,6 +98,18 @@ See `run_ivr_20260331_183642/analysis_v2.md` for full analysis.
 
 **Key finding:** IVR resolves 100% of cases within 10 attempts for both strategies. `multi_turn` is the better strategy for QKT migration tasks (97.8% vs 88.9% first-attempt); strategies are equivalent on QHE. The ~5% drop in QHE check() pass rate vs Phase 2 (32.5% → 27.8%) is attributed to stochastic variance and hardware differences (LSF vs laptop).
 
+### Phase 4 — `check()` as live IVR validator (v3, Qiskit model, LSF)
+
+QHE re-run with the per-problem `check()` unit test wired into the IVR repair loop as a second validator alongside QKT. Made viable by [qiskit-human-eval PR #88](https://github.com/qiskit-community/qiskit-human-eval/pull/88), which added f-string assertion messages so `check()` failures produce actionable repair feedback (e.g. `"Expected 3 qubits, got 5"` rather than a silent `AssertionError:`). For a run to pass, **both** validators must succeed. No system prompt or grounding context.
+
+| Run | Model | Config | Prompts | Results |
+|---|---|---|---|---|
+| `run_v3_20260427_194907/` | Qiskit model | repair_template, multi_turn | 151 QHE × 2 strategies | 302 cases, 152/302 passed (50.3%) |
+
+See [`run_v3_20260427_194907/analysis_v3.md`](run_v3_20260427_194907/analysis_v3.md) for the full analysis.
+
+**Key finding:** Wiring `check()` into the loop nearly doubled functional correctness vs the v2 post-hoc baseline (27.8% → 50.3%, +22.5pp). The improvement holds across all difficulty tiers — basic 41.0% → 61.4%, intermediate 14.7% → 39.6%, difficult 0% → 20.0% — including one difficult-tier prompt (`qiskitHumanEval/150`, for-loop circuit) that v2 could not solve at all. Strategy behavior also flips under richer feedback: `repair_template` rescues 4× more cases through multi-attempt repair (33.8% vs 8.0%), the opposite of the v2 QKT-only pattern where `multi_turn` was slightly better.
+
 ---
 
 ## Running the benchmark
@@ -106,6 +120,42 @@ Requires `uv`. Run from the `qiskit_code_validation/` directory (one level up fr
 
 ```bash
 uv run benchmark.py --example-dir /path/to/mellea/docs/examples/instruct_validate_repair/qiskit_code_validation
+```
+
+### v3 (`benchmark_v3.py`)
+
+QHE with QKT + `check()` as dual validators in the IVR loop. Run from the `qiskit_code_validation/benchmarking/` directory.
+
+```bash
+# Default: both strategies (repair_template + multi_turn) over the full QHE corpus
+uv run benchmark_v3.py --example-dir /path/to/mellea/docs/examples/instruct_validate_repair/qiskit_code_validation
+
+# Run only one strategy
+uv run benchmark_v3.py --repair-template --example-dir ...
+uv run benchmark_v3.py --multi-turn --example-dir ...
+
+# Resume the most recent partial run
+uv run benchmark_v3.py --resume --example-dir ...
+
+# Resume a specific run by JSON path
+uv run benchmark_v3.py --resume-from run_v3_20260427_194907/benchmark_qhe_v3_20260427_194907.json --example-dir ...
+```
+
+The `run_benchmark_with_ollama.sh` wrapper invokes `benchmark_v3.py` and handles ollama setup automatically. On LSF (bluevela):
+
+```bash
+bsub -N -u your@email.com \
+  -n 1 -G grp_preemptable -q preemptable \
+  -gpu "num=1/task:mode=shared:j_exclusive=yes" \
+  "cd /proj/dmfexp/eiger/users/ajbozarth/toolbox/mellea/qiskit_code_validation/benchmarking && bash run_benchmark_with_ollama.sh"
+```
+
+`fetch_dataset.py` downloads the QHE parquet. v3 depends on the assertion messages from PR #88, so use `--from-pr 88` to pull a v3-compatible copy directly from the PR branch:
+
+```bash
+uv run fetch_dataset.py                    # HuggingFace main
+uv run fetch_dataset.py --revision <sha>   # specific HuggingFace revision
+uv run fetch_dataset.py --from-pr 88       # GitHub PR branch
 ```
 
 ### v2 (`benchmark_v2.py`)
@@ -121,15 +171,6 @@ uv run benchmark_v2.py --phase2 --example-dir ...
 # Resume an interrupted run
 uv run benchmark_v2.py --resume --phase1 --example-dir ...
 uv run benchmark_v2.py --resume --phase2 --example-dir ...
-```
-
-On LSF (bluevela), use `run_benchmark_with_ollama.sh` instead — it handles ollama setup automatically:
-
-```bash
-bsub -N -u your@email.com \
-  -n 1 -G grp_preemptable -q preemptable \
-  -gpu "num=1/task:mode=shared:j_exclusive=yes" \
-  "cd /proj/dmfexp/eiger/users/ajbozarth/toolbox/mellea/qiskit_code_validation/benchmarking && bash run_benchmark_with_ollama.sh"
 ```
 
 ### v1 (`benchmark.py`)

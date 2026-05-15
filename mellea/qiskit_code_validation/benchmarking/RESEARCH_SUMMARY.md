@@ -174,9 +174,11 @@ Total: 151 × 5 = 755 runs, ~12-14 hours.
 
 **Note:** A few known buggy QHE tests (issues #42, #17) should be excluded from analysis.
 
-**~~Phase 3 — `check()` as a live validator~~** *Removed after investigation.*
+**~~Phase 3 — `check()` as a live validator~~** *Removed after investigation; later revisited as v3 — see update below.*
 
 The QHE `check()` functions use bare `assert` statements with no custom messages. Assertion failures (the interesting case — code ran but produced the wrong answer) produce no diagnostic output: `"Test assertion failed: "`. Only runtime exceptions (ImportError, TypeError, etc.) produce traceback detail, but those are already partially addressed by QKT validation. Without actionable feedback from `check()` failures, wiring it into the repair loop would not give the model meaningful signal to repair against.
+
+**Update (April 2026):** [qiskit-human-eval PR #88](https://github.com/qiskit-community/qiskit-human-eval/pull/88) proposes adding f-string assertion messages to the dataset's `check()` functions, which removes the blocker above. The PR branch is usable directly via `fetch_dataset.py --from-pr 88`. Pulling that branch let us revisit the phase as benchmark v3, which produced the strongest result of the project: functional correctness rose from 27.8% (v2 post-hoc) to 50.3% (v3 in-loop), +22.5pp. See [`run_v3_20260427_194907/analysis_v3.md`](run_v3_20260427_194907/analysis_v3.md) and the Phase 4 section of [`README.md`](README.md).
 
 ---
 
