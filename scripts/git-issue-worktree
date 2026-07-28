@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# git-issue-worktree <issue-number>
+#
+# Creates a git worktree for working on a GitHub issue:
+#   - Branch is based off the latest upstream/main (or origin/main if no upstream)
+#   - Worktree directory is a sibling of the current repo: <repo>-worktrees/<dir>
+#   - Branch and dir names come from the issue title when it has a conventional
+#     prefix (feat:, fix:, refactor:, etc.); falls back to issue-<num> otherwise
+
+set -euo pipefail
+
+issue="${1:?usage: git issue-worktree <issue-number>}"
+
+# --- Locate the repo on disk -------------------------------------------------
+repo_root=$(git rev-parse --show-toplevel)
+repo_name=$(basename "$repo_root")
+parent_dir=$(dirname "$repo_root")
+
+# --- Pick the source-of-truth remote ----------------------------------------
+# For forks, upstream is the canonical repo. Fall back to origin if no upstream.
+remote=upstream
+git remote get-url "$remote" >/dev/null 2>&1 || remote=origin
+
+# --- Default branch ---------------------------------------------------------
+default_branch=main
+
+# --- Build branch + dir names from the issue title --------------------------
+title=$(gh issue view "$issue" --json title --jq .title)
+
+# Pull off a conventional prefix if present; either way, $rest holds the text to slug.
+prefix=""
+rest="$title"
+if [[ "$title" =~ ^(feat|fix|refactor|docs|test|chore)(\([^\)]*\))?!?:[[:space:]]+(.+)$ ]]; then
+  prefix="${BASH_REMATCH[1]}"
+  rest="${BASH_REMATCH[3]}"
+fi
+
+# Try the LLM-based slug first; fall back to mechanical slugification.
+slug=""
+if command -v issue-slug >/dev/null 2>&1; then
+  slug=$(issue-slug "$issue" 2>/dev/null || true)
+fi
+if [[ -z "$slug" ]]; then
+  slug=$(echo "$rest" \
+    | tr '[:upper:]' '[:lower:]' \
+    | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' \
+    | awk -F- '{ n=(NF<5?NF:5); for (i=1;i<=n;i++) printf "%s%s", $i, (i<n?"-":"") }')
+fi
+
+if [[ -z "$slug" ]]; then
+  branch="issue-${issue}"
+  dirname="issue-${issue}"
+elif [[ -n "$prefix" ]]; then
+  branch="${prefix}/${issue}-${slug}"
+  dirname="${issue}-${slug}"
+else
+  branch="issue-${issue}-${slug}"
+  dirname="${issue}-${slug}"
+fi
+
+worktree_dir="${parent_dir}/${repo_name}-worktrees/${dirname}"
+
+# --- Create the worktree ----------------------------------------------------
+git fetch "$remote" "$default_branch"
+# --no-track: start from $remote/$default_branch but set no upstream, matching a
+# manual `git checkout -b <branch>` off local main. The first `git push -u origin
+# <branch>` then sets tracking to the fork, instead of inheriting $remote/main.
+git worktree add --no-track -b "$branch" "$worktree_dir" "$remote/$default_branch"
+
+echo
+echo "Based on: $remote/$default_branch (no-track)"
+echo "Branch:   $branch"
+echo "Worktree: $worktree_dir"
