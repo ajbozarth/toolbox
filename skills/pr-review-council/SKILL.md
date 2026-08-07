@@ -84,6 +84,7 @@ Collect the reviewer outputs:
 ```bash
 ls scratchpad/pr-review-claude.md \
    scratchpad/pr-review-codex.md \
+   scratchpad/pr-review-bob.md \
    scratchpad/pr-review-gemini.md \
    scratchpad/pr-review-opencode-*.md 2>/dev/null
 ```

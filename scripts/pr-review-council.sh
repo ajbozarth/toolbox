@@ -21,6 +21,7 @@ COUNCIL=(
   "opencode|openai/azure/gpt-5.5|opencode-gpt"
   "opencode|litellm/gcp/gemini-3.1-pro-preview|opencode-gemini"
   "opencode|anthropic/aws/claude-opus-4-8|opencode-opus"
+  "bob||bob"
   # gemini-cli: re-enable once the litellm instance picks up the fix.
   # "gemini||gemini"
 )
@@ -144,6 +145,12 @@ build_cmd() {
       CMD=(env "XDG_DATA_HOME=$xdg_base/$suffix" opencode run "$prompt" --dangerously-skip-permissions)
       [[ -n "$model" ]] && CMD+=(-m "$model")
       ;;
+    bob)
+      # Prompt is positional and must come last. --trust marks the folder trusted;
+      # headless `bob run` pre-approves tool calls, so there's no perms flag. No -m:
+      # the model is fixed by the mode. Needs BOB_API_KEY in the env or bob hangs on login.
+      CMD=(bob run --trust "$prompt")
+      ;;
     gemini)
       CMD=(gemini -p "$prompt" --yolo --skip-trust)
       [[ -n "$model" ]] && CMD+=(-m "$model")
@@ -169,6 +176,9 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
     if ! command -v "$harness" >/dev/null 2>&1; then
       echo "  [skip] $harness not found on PATH -> would write pr-review-$suffix.md"; continue
     fi
+    if [[ "$harness" == "bob" && -z "${BOB_API_KEY:-}" ]]; then
+      echo "  [skip] bob: BOB_API_KEY not set (would hang on login)"; continue
+    fi
     printf '  [%s] -> scratchpad/pr-review-%s.md\n' "$harness" "$suffix"
     printf '        %q ' "${CMD[@]}"; echo
   done
@@ -187,6 +197,13 @@ for entry in "${COUNCIL[@]}"; do
 
   if ! command -v "$harness" >/dev/null 2>&1; then
     SKIPPED+=("$harness ($suffix): binary not on PATH")
+    continue
+  fi
+
+  # bob hangs on an interactive login prompt if its key is absent (every other harness
+  # fails fast), so skip it rather than stall the whole council waiting on dead stdin.
+  if [[ "$harness" == "bob" && -z "${BOB_API_KEY:-}" ]]; then
+    SKIPPED+=("$harness ($suffix): BOB_API_KEY not set (would hang on login)")
     continue
   fi
 

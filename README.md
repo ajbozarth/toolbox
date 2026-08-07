@@ -7,7 +7,7 @@ Standalone command-line scripts, usable from any repo.
 
 | Script | What it does |
 |---|---|
-| `pr-review-council.sh` | Fans out a single PR-review prompt to several AI CLIs (claude, codex, opencode) headlessly and in parallel, each writing its own `scratchpad/pr-review-<suffix>.md`. Run it from inside the repo you want reviewed, with a draft PR body in that repo's `scratchpad/`. See `--help`. |
+| `pr-review-council.sh` | Fans out a single PR-review prompt to several AI CLIs (claude, codex, opencode, IBM Bob) headlessly and in parallel, each writing its own `scratchpad/pr-review-<suffix>.md`. Run it from inside the repo you want reviewed, with a draft PR body in that repo's `scratchpad/`. See `--help`. |
 | `git-issue-worktree` | `git issue-worktree <issue-number>` — creates a worktree for a GitHub issue as a sibling of the current repo (`<repo>-worktrees/<dir>`), branched off the upstream default branch. Branch/dir names come from the issue title; a conventional prefix (`feat:`, `fix:`, …) maps to the branch namespace. Pairs with `issue-slug` for the name (falls back to mechanical slugification if it's missing or fails). |
 | `issue-slug` | `issue-slug <issue-number>` — prints a 3–4 word kebab-case branch slug generated from the issue title by a local LLM (via Mellea). Optional companion to `git-issue-worktree`. Self-contained `uv run --script`, but needs a local Mellea backend (e.g. Ollama) available. |
 
