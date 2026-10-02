@@ -1,22 +1,25 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["mellea"]
+# dependencies = ["mellea", "codespell"]
 # ///
 """Generate a git branch slug from a GitHub issue number.
 
 Usage: issue-slug <issue-number>
 Outputs a 3-4 word kebab-case slug to stdout, or exits non-zero on failure.
 """
+
 import logging
+import os
 import re
 import subprocess
 import sys
+import tempfile
 
 from mellea import start_session
+from mellea.core.utils import MelleaLogger
 from mellea.stdlib.requirements import Requirement, simple_validate
 from mellea.stdlib.sampling import RejectionSamplingStrategy
-from mellea.core.utils import MelleaLogger
 
 # Silence mellea's INFO log chatter so stdout is just the slug.
 MelleaLogger.get_logger().setLevel(logging.WARNING)
@@ -43,6 +46,27 @@ def fetch_title(issue: str) -> str:
         check=True,
     )
     return result.stdout.strip()
+
+
+def spelled_correctly(slug: str) -> bool:
+    """True if codespell finds no typos in `slug` (best-effort; True if unavailable).
+
+    codespell detects a misspelling even inside a hyphenated token, so the whole slug
+    is checked at once; it exits non-zero when it finds one. Used both as a sampling
+    requirement and as a final gate.
+    """
+    with tempfile.NamedTemporaryFile("w+", suffix=".txt", delete=False) as f:
+        f.write(slug + "\n")
+        path = f.name
+    try:
+        result = subprocess.run(
+            ["codespell", path], capture_output=True, text=True, check=False
+        )
+        return result.returncode == 0
+    except OSError:
+        return True  # codespell unavailable -> don't block slug generation
+    finally:
+        os.unlink(path)
 
 
 def main() -> int:
@@ -77,7 +101,11 @@ def main() -> int:
             Requirement(
                 "Output is exactly 3-4 lowercase kebab-case words.",
                 validation_fn=simple_validate(is_strict_slug),
-            )
+            ),
+            Requirement(
+                "Every word in the slug is spelled correctly.",
+                validation_fn=simple_validate(spelled_correctly),
+            ),
         ],
         strategy=RejectionSamplingStrategy(loop_budget=3),
     )
@@ -95,6 +123,12 @@ def main() -> int:
 
     if not is_loose_slug(slug):
         print(f"validation failed: {slug!r}", file=sys.stderr)
+        return 1
+
+    # Spelling is a hard gate too: a typo'd slug would just block the first commit at
+    # codespell, so fail loudly here rather than emit it.
+    if not spelled_correctly(slug):
+        print(f"validation failed (spelling): {slug!r}", file=sys.stderr)
         return 1
 
     quality = "strict" if is_strict_slug(slug) else "loose"
