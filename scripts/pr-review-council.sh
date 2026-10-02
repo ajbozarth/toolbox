@@ -109,7 +109,7 @@ build_prompt() {
 Before opening a PR for my current branch, do a PR review.
 The planned PR body is at $pr_body for reference.
 After completing your review, save the results to a new file scratchpad/pr-review-$suffix.md.
-Only review — do not modify any existing files; the only file you may create is your review output file.
+Only review — do not modify any existing files or invoke the pr-review-council skill; the only file you may create is your review output file.
 EOF
 }
 
