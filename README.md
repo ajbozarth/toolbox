@@ -33,7 +33,8 @@ in any repo. Register the directory in your Claude Code `~/.claude/settings.json
 
 | Skill | What it does |
 |---|---|
-| `pr-review-council` | Convene the AI Review Council on the current branch before opening a PR: runs `pr-review-council.sh`, then consolidates every reviewer's findings into one attributed action-item file and hands off to interactive triage. |
+| `pr-review-council` | Convene the AI Review Council on the current branch before opening a PR: runs `pr-review-council.sh`, then consolidates every reviewer's findings into one attributed action-item file and hands off to the `triage-list` skill. |
+| `triage-list` | Work through a list of items with the user one at a time — research, propose, discuss, and resolve each before moving on, at the user's pace. The user drives every advance, edit, and commit. Pairs with `pr-review-council` for working a consolidated action file. |
 | `get-blog-context` | Gather full context for a new blog post before drafting: pull the tracking issue, find related prior posts, survey source repos, report a brief. |
 | `review-blogpost-pr` | Pre-publish review of a blog post PR: process compliance, content quality, de-llmify score, code correctness, technical accuracy. |
 

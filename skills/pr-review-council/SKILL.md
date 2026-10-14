@@ -171,8 +171,9 @@ phases this skill deliberately leaves to them:
 3. **Commit or amend** (the user's call which).
 4. **Open the PR** using the draft PR body.
 
-When the user signals they're ready to start triage, begin at item 1 and go one
-at a time. Don't pre-empt their decisions or start editing before they've chosen.
+When the user signals they're ready to start triage, hand off to the `triage-list`
+skill (or, without it, begin at item 1 and go one at a time). Don't pre-empt their
+decisions or start editing before they've chosen.
 
 ---
 
