@@ -18,12 +18,11 @@ set -uo pipefail
 COUNCIL=(
   "claude|opus|claude"
   "codex||codex"
-  "opencode|openai/azure/gpt-5.5|opencode-gpt"
+  "opencode|openai/azure/gpt-6.1-sol|opencode-gpt"
   "opencode|litellm/gcp/gemini-3.1-pro-preview|opencode-gemini"
-  "opencode|anthropic/aws/claude-opus-4-8|opencode-opus"
+  "opencode|anthropic/aws/claude-opus-5-5|opencode-opus"
   "bob||bob"
-  # gemini-cli: re-enable once the litellm instance picks up the fix.
-  # "gemini||gemini"
+  "gemini||gemini"
 )
 
 # --- args ---------------------------------------------------------------------
@@ -186,6 +185,12 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
 fi
 
 # --- run in parallel ----------------------------------------------------------
+# Idle sleep suspends the reviewers and drops their in-flight API connections.
+# -w $$ ends caffeinate when this script exits. Lid-close sleep is not prevented.
+if [[ "$(uname)" == "Darwin" ]] && command -v caffeinate >/dev/null 2>&1; then
+  caffeinate -i -w $$ >/dev/null 2>&1 &
+fi
+
 mkdir -p "$LOG_DIR"
 cd "$REPO_ROOT" || { echo "Error: cannot cd to repo root $REPO_ROOT" >&2; exit 1; }
 
