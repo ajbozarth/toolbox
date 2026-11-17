@@ -37,6 +37,7 @@ in any repo. Register the directory in your Claude Code `~/.claude/settings.json
 | `triage-list` | Work through a list of items with the user one at a time — research, propose, discuss, and resolve each before moving on, at the user's pace. The user drives every advance, edit, and commit. Pairs with `pr-review-council` for working a consolidated action file. |
 | `get-blog-context` | Gather full context for a new blog post before drafting: pull the tracking issue, find related prior posts, survey source repos, report a brief. |
 | `review-blogpost-pr` | Pre-publish review of a blog post PR: process compliance, content quality, de-llmify score, code correctness, technical accuracy. |
+| `update-goals` | Draft work-goal updates for SAP SuccessFactors with the user in the loop: reads goals from an exported PDF, gathers GitHub activity across every `gh`-authenticated host (bundled `gather_github.sh`), walks the user through Microsoft 365 Copilot prompts for email/calendar/Teams evidence, then drafts an activity overview plus one paste-ready comment per goal. Never writes to SuccessFactors. |
 
 ## mellea/qiskit_code_validation/
 
